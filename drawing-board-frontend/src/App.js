@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import DrawingForm from './DrawingForm';
+import DrawingList from './DrawingList';
 
 function App() {
   return (
@@ -9,7 +10,10 @@ function App() {
         <h2>Drawing board</h2>
       </div>
 
+      <div className="App-contents">
       <DrawingForm />
+      <DrawingList />
+      </div>
     </div>
   );
 }
