@@ -1,3 +1,5 @@
+html,body, #root { height: 100%; margin: 0px; padding: 0px; }
+
 .App {
   text-align: left;
   height: 100%;
@@ -18,6 +20,7 @@
 
 .App-contents {
   margin: 3.125rem;
+  height: 70%;
 }
 
 .Form {
@@ -78,4 +81,22 @@
 
 .DrawingList-item:last-child {
   border-bottom: none;
+}
+
+.Drawing {
+  height: 100%;
+}
+
+.Drawing-title {
+  font-size: 2.0625rem;
+  padding: 0.625rem;
+  margin-bottom: 0.625rem;
+  background-color: #444;
+  color: #fff;
+  font-weight: 100;
+}
+
+.Canvas {
+  border: 1px solid #444;
+  height: 100%;
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { subscribeToDrawings } from './api';
 
-const DrawingList = () => {
+const DrawingList = ({ selectDrawing }) => {
   const [drawings, setDrawings] = useState([]);
 
   useEffect(() => {
@@ -11,7 +11,11 @@ const DrawingList = () => {
   }, []);
 
   const drawingItems = drawings.map(drawing => (
-    <li className="DrawingList-item" key={drawing.id}>
+    <li
+      className="DrawingList-item"
+      key={drawing.id}
+      onClick={event => selectDrawing(drawing)}
+    >
       {drawing.name}
     </li>
   ));
