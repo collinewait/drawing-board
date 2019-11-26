@@ -3,6 +3,7 @@ import './App.css';
 import DrawingForm from './DrawingForm';
 import DrawingList from './DrawingList';
 import Drawing from './Drawing';
+import Connection from './Connection';
 
 const isEmptyObject = obj =>
   Object.entries(obj).length === 0 && obj.constructor === Object;
@@ -29,7 +30,10 @@ const App = () => {
         <h2>Drawing board</h2>
       </div>
 
-      <div className="App-contents">{ctrl}</div>
+      <div className="App-contents">
+        <Connection />
+        {ctrl}
+      </div>
     </div>
   );
 };

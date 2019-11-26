@@ -2,7 +2,9 @@ import openSocket from 'socket.io-client';
 import { fromEventPattern } from 'rxjs';
 import { bufferTime, map } from 'rxjs/operators';
 
-const socket = openSocket(process.env.REACT_APP_SERVER_URL);
+const port = parseInt(window.location.search.replace('?', '')) || 8000; // this is a hack only for the demo. don't do it in real life
+//const socket = openSocket(process.env.REACT_APP_SERVER_URL);
+const socket = openSocket(process.env.REACT_APP_SERVER_URL + port);
 
 function subscribeToDrawings(cb) {
   socket.on('drawing', cb);
@@ -32,9 +34,33 @@ function subscribeToDrawingLines(drawingId, cb) {
   socket.emit('subscribeToDrawingLines', drawingId);
 }
 
+function subscribeToConnectionEvent(cb) {
+  socket.on('connect', () =>
+    cb({
+      status: 'connected',
+      port,
+    }),
+  );
+
+  socket.on('disconnect', () =>
+    cb({
+      status: 'disconnected',
+      port,
+    }),
+  );
+
+  socket.on('connect_error', () =>
+    cb({
+      status: 'disconnected',
+      port,
+    }),
+  );
+}
+
 export {
   createDrawing,
   subscribeToDrawings,
   publishLine,
   subscribeToDrawingLines,
+  subscribeToConnectionEvent,
 };

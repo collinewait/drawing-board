@@ -100,3 +100,16 @@ html,body, #root { height: 100%; margin: 0px; padding: 0px; }
   border: 1px solid #444;
   height: 100%;
 }
+
+.Connection-error {
+  background-color: red;
+  color: #fff;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.Connection-port {
+  background-color:#fff;
+  padding: 10px;
+  font-size: 20px;
+}
