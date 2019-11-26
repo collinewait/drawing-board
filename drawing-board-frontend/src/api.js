@@ -1,6 +1,6 @@
 import openSocket from 'socket.io-client';
 import { fromEventPattern } from 'rxjs';
-import { bufferTime, map } from 'rxjs/operators';
+import { bufferTime, map, scan, withLatestFrom } from 'rxjs/operators';
 
 const port = parseInt(window.location.search.replace('?', '')) || 8000; // this is a hack only for the demo. don't do it in real life
 //const socket = openSocket(process.env.REACT_APP_SERVER_URL);
@@ -29,9 +29,28 @@ function subscribeToDrawingLines(drawingId, cb) {
     bufferTime(100),
     map(lines => ({ lines })),
   );
-  bufferedTimeStream.subscribe(linesEvent => cb(linesEvent));
 
-  socket.emit('subscribeToDrawingLines', drawingId);
+  const reconnectStream = fromEventPattern(
+    h => socket.on('connect', h),
+    h => socket.off('connect', h),
+  );
+
+  // get the latest timestamp
+  const maxStream = lineStream.pipe(
+    map(l => new Date(l.timestamp).getTime()),
+    scan((a, b) => Math.max(a, b), 0),
+  );
+
+  reconnectStream.pipe(withLatestFrom(maxStream)).subscribe(joined => {
+    const lastReceivedTimestamp = joined[1];
+    socket.emit('subscribeToDrawingLines', {
+      drawingId,
+      from: lastReceivedTimestamp,
+    });
+  });
+
+  bufferedTimeStream.subscribe(linesEvent => cb(linesEvent));
+  socket.emit('subscribeToDrawingLines', { drawingId });
 }
 
 function subscribeToConnectionEvent(cb) {
