@@ -12,10 +12,10 @@ const Drawing = ({ drawing }) => {
   };
 
   useEffect(() => {
-    subscribeToDrawingLines(drawing.id, line => {
-      setLines(prevLines => [...prevLines, line]);
+    subscribeToDrawingLines(drawing.id, lineEvent => {
+      setLines(prevLines => [...prevLines, ...lineEvent.lines]);
     });
-  }, []);
+  }, [drawing.id]);
 
   return drawing ? (
     <div className="Drawing">

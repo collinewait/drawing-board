@@ -1,4 +1,6 @@
 import openSocket from 'socket.io-client';
+import { fromEventPattern } from 'rxjs';
+import { bufferTime, map } from 'rxjs/operators';
 
 const socket = openSocket(process.env.REACT_APP_SERVER_URL);
 
@@ -16,7 +18,17 @@ function publishLine({ drawingId, line }) {
 }
 
 function subscribeToDrawingLines(drawingId, cb) {
-  socket.on(`drawingLine:${drawingId}`, cb);
+  const lineStream = fromEventPattern(
+    h => socket.on(`drawingLine:${drawingId}`, h),
+    h => socket.off(`drawingLine:${drawingId}`, h),
+  );
+
+  const bufferedTimeStream = lineStream.pipe(
+    bufferTime(100),
+    map(lines => ({ lines })),
+  );
+  bufferedTimeStream.subscribe(linesEvent => cb(linesEvent));
+
   socket.emit('subscribeToDrawingLines', drawingId);
 }
 
