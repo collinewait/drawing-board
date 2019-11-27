@@ -1,5 +1,7 @@
 const r = require('rethinkdb');
 
+const { env } = process;
+
 function createDrawing({ connection, name }) {
   r.table('drawings')
     .insert({
@@ -49,9 +51,9 @@ function subscribeToDrawingLines({ client, connection, drawingId, from }) {
 
 function getDBConnection() {
   return r.connect({
-    host: 'localhost',
-    port: 28015,
-    db: 'drawing_board',
+    host: env.DB_HOST,
+    port: env.DB_PORT,
+    db: env.DB_NAME,
   });
 }
 

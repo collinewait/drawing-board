@@ -1,3 +1,6 @@
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+  require('dotenv').config();
+}
 const {
   createDrawing,
   subscribeToDrawings,
@@ -5,7 +8,6 @@ const {
   subscribeToDrawingLines,
   getDBConnection,
 } = require('./db');
-
 const io = require('socket.io')();
 
 getDBConnection().then(connection => {
