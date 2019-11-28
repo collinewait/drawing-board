@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { subscribeToDrawings } from './api';
+import { subscribeToDrawings, socket } from './api';
 
 const DrawingList = () => {
   const [drawings, setDrawings] = useState([]);
 
+  const drawingsHandler = drawing => {
+    setDrawings(prevDrawings => prevDrawings.concat([drawing]));
+  };
+
   useEffect(() => {
-    subscribeToDrawings(drawing => {
-      setDrawings(prevDrawings => prevDrawings.concat([drawing]));
-    });
+    subscribeToDrawings(drawingsHandler);
+    return () => {
+      socket.off('drawing', drawingsHandler);
+    };
   }, []);
 
   const drawingItems = drawings.map(drawing => (

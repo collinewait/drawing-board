@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Canvas from 'simple-react-canvas';
-import { publishLine, subscribeToDrawingLines } from './api';
+import { publishLine, subscribeToDrawingLines, socket } from './api';
 const Drawing = ({
   location: {
     state: { drawing },
@@ -16,9 +16,17 @@ const Drawing = ({
   };
 
   useEffect(() => {
-    subscribeToDrawingLines(drawing.id, lineEvent => {
-      setLines(prevLines => [...prevLines, ...lineEvent.lines]);
+    let subscription;
+    subscribeToDrawingLines(drawing.id, bufferedTimeStream => {
+      subscription = bufferedTimeStream.subscribe(linesEvent => {
+        setLines(prevLines => [...prevLines, ...linesEvent.lines]);
+      });
     });
+
+    return () => {
+      socket.off(`drawingLine:${drawing.id}`, null);
+      subscription.unsubscribe();
+    };
   }, [drawing.id]);
 
   return drawing ? (

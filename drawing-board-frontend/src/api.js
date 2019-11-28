@@ -49,7 +49,7 @@ function subscribeToDrawingLines(drawingId, cb) {
     });
   });
 
-  bufferedTimeStream.subscribe(linesEvent => cb(linesEvent));
+  cb(bufferedTimeStream);
   socket.emit('subscribeToDrawingLines', { drawingId });
 }
 
@@ -82,4 +82,5 @@ export {
   publishLine,
   subscribeToDrawingLines,
   subscribeToConnectionEvent,
+  socket,
 };
