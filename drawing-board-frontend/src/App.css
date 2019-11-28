@@ -66,7 +66,7 @@ html,body, #root { height: 100%; margin: 0px; padding: 0px; }
   padding-bottom: 0.9375rem;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
-  border-bottom: solid 1px #eee;
+  border-bottom: solid 1px #eee !important;
   cursor: pointer;
 }
 
@@ -112,4 +112,14 @@ html,body, #root { height: 100%; margin: 0px; padding: 0px; }
   background-color:#fff;
   padding: 10px;
   font-size: 20px;
+}
+
+.Drawing-link {
+  text-decoration: none;
+  color: black;
+}
+
+.Header-link {
+  color: inherit;
+  text-decoration: inherit;
 }

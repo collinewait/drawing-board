@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Canvas from 'simple-react-canvas';
 import { publishLine, subscribeToDrawingLines } from './api';
-const Drawing = ({ drawing }) => {
+const Drawing = ({
+  location: {
+    state: { drawing },
+  },
+}) => {
   const [lines, setLines] = useState([]);
 
   const handleDraw = line => {
